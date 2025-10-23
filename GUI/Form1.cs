@@ -16,7 +16,7 @@ namespace GUI
     {
         private Gestor_Partida gestorpartida = new Gestor_Partida();
         private TiradaService tiradaService = new TiradaService();
-       
+        private readonly Gestor_Puntaje gestorPuntaje = new Gestor_Puntaje();
         private TableroService tableroService = new TableroService();
         private DadoService dadoService = new DadoService();
         private Tablero tableroJugador1;
@@ -45,6 +45,8 @@ namespace GUI
             checkBox4.CheckedChanged += CheckBox4_CheckedChanged;
             checkBox5.CheckedChanged += CheckBox5_CheckedChanged;
         }
+
+        #region "EVENTOS CHECKBOX"
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (dadoControl1.Dado != null)
@@ -89,6 +91,7 @@ namespace GUI
                 dadoControl5.ActualizarImagen();
             }
         }
+        #endregion
         private void Begin()
         {
             try
@@ -128,9 +131,6 @@ namespace GUI
             {
                 label2.Text = usuario2.Nombre.ToString();
             }
-
-            
-
         }
         public void RefreshTurno()
         {
@@ -155,8 +155,12 @@ namespace GUI
             }
 
         }
-
-        #region "BUTTONS"
+        
+        #region "botones del form"
+        private void button6_Click(object sender, EventArgs e)
+        {
+            
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             Usuario usuario = Sesion.Get(0);
@@ -371,6 +375,11 @@ namespace GUI
             }
         }
 
-        
+        private void dadoControl5_Load(object sender, EventArgs e)
+        {
+
+        }
+
+    
     }
     }
