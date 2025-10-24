@@ -358,7 +358,10 @@ namespace GUI
 
         private void btn_Finalizar_Click(object sender, EventArgs e)
         {
-
+            gestorpartida.FinalizarPartida();
+            var ganador = gestorpartida.Ganador();
+            var mensajeGanador = ganador != null ? $"El ganador ha sido {ganador.Nombre}" : "La partida ha finalizado en empate.";
+            MessageBox.Show($"La partida ha finalizado. {mensajeGanador}", "Partida finalizada");
             btn_Finalizar.Enabled = false;
             btn_Iniciar.Enabled = true;
         }
@@ -385,7 +388,7 @@ namespace GUI
                 if (tableroJugador1 != null)
                 {
                     dataGridView1.Rows.Clear();
-                    foreach (   BE.Categoria categoria in tableroJugador1.Categorias)
+                    foreach (BE.Categoria categoria in tableroJugador1.Categorias)
                     {
                         string[] row = new string[]
                         {
@@ -444,13 +447,13 @@ namespace GUI
             {
                 tiradaActual = tiradaService.CrearNuevaTirada(5);
                 DadoControl[] dadosControles = new DadoControl[5] {
-                    dadoControl1, 
+                    dadoControl1,
                     dadoControl2,
-                    dadoControl3, 
+                    dadoControl3,
                     dadoControl4,
                     dadoControl5
                 };
-                
+                                    
                
                 for (int i = 0; i < dadosControles.Length && i < tiradaActual.Dados.Count; i++)
                 {
