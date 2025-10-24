@@ -24,8 +24,8 @@ namespace GUI
         private BE.Tirada tiradaActual;
         private readonly string[] _imagenesPath = new string[6]
         {
-            "dado1.png", // Prueba usando "/" en lugar de "\\"
-            "dado2.png", // Y elimina los espacios en los nombres
+            "dado1.png", 
+            "dado2.png", 
             "dado3.png",
             "dado4.png",
             "dado5.png",
@@ -36,7 +36,7 @@ namespace GUI
             InitializeComponent();
         }
 
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
             checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
@@ -44,6 +44,15 @@ namespace GUI
             checkBox3.CheckedChanged += CheckBox3_CheckedChanged;
             checkBox4.CheckedChanged += CheckBox4_CheckedChanged;
             checkBox5.CheckedChanged += CheckBox5_CheckedChanged;
+
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.MultiSelect = false;
+            dataGridView1.ReadOnly = true;
+
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.MultiSelect = false;
+            dataGridView2.ReadOnly = true;
+
         }
 
         #region "EVENTOS CHECKBOX"
@@ -155,11 +164,117 @@ namespace GUI
             }
 
         }
-        
+        private bool TryObtenerGridYTableroActual(out DataGridView gridActual, out Tablero tableroActual)
+        {
+            gridActual = null;
+            tableroActual = null;
+
+            var jugadorActual = gestorpartida.ObtenerJugadorActual();
+            if (jugadorActual == null) return false;
+
+            if (tableroJugador1 != null && tableroJugador1.Jugador == jugadorActual)
+            {
+                gridActual = dataGridView1;
+                tableroActual = tableroJugador1;
+                return true;
+            }
+            if (tableroJugador2 != null && tableroJugador2.Jugador == jugadorActual)
+            {
+                gridActual = dataGridView2;
+                tableroActual = tableroJugador2;
+                return true;
+            }
+            return false;
+        }
+
         #region "botones del form"
         private void button6_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                if (tiradaActual == null || tiradaActual.NumeroLanzamientos <= 0)
+                {
+                    MessageBox.Show("Debes lanzar al menos una vez antes de anotar.", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+               
+                if (!TryObtenerGridYTableroActual(out DataGridView gridActual, out Tablero tableroActual))
+                {
+                    MessageBox.Show("No hay jugador activo o tablero asociado.", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                DataGridViewRow row = gridActual.CurrentRow;
+                if (row == null || row.Index < 0)
+                {
+                    MessageBox.Show("Selecciona una fila de categoría.", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                string categoriaNombre = Convert.ToString(row.Cells[0].Value);
+                if (string.IsNullOrWhiteSpace(categoriaNombre) ||
+                    categoriaNombre.Trim().Equals("TOTAL", StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Selecciona una categoría válida (no TOTAL).", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                BE.Categoria categoria = tableroActual.Categorias.FirstOrDefault(c => c.Nombre == categoriaNombre);
+                if (categoria == null)
+                {
+                    MessageBox.Show("Categoría inexistente.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (categoria.Utilizada)
+                {
+                    MessageBox.Show("Esa categoría ya fue utilizada.", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                int[] valores = tiradaService.ObtenerValoresDados(tiradaActual);
+
+                
+                if (!gestorPuntaje.CumpleCategoria(categoriaNombre, valores, tableroActual))
+                {
+                    MessageBox.Show("La tirada no cumple con la categoría seleccionada.", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                int puntos = gestorPuntaje.CalcularPuntajeParaCategoria(categoriaNombre, valores, tableroActual);
+
+                // 5) Anotar
+                bool ok = tableroService.AnotarPuntuacion(tableroActual, categoriaNombre, puntos);
+                if (!ok)
+                {
+                    MessageBox.Show("No se pudo anotar la puntuación.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                CrearTablerosVisuales();
+                tiradaService.ReiniciarTirada(tiradaActual);
+                checkBox1.Checked = false;
+                checkBox2.Checked = false;
+                checkBox3.Checked = false;
+                checkBox4.Checked = false;
+                checkBox5.Checked = false;
+                RefrescarTodasImagenes();
+                button6.Enabled = false;
+                gestorpartida.CambiarTurno();
+                RefreshTurno();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al anotar: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -169,10 +284,10 @@ namespace GUI
                 // Guardamos el nombre para el mensaje
                 string nombreUsuario = usuario.Nombre;
 
-                // Eliminar usuario de la sesión
+                
                 Sesion.Eliminar(usuario);
 
-                // Actualizar la interfaz
+               
                 label1.Text = "No iniciado";
 
                 MessageBox.Show($"Se cerró la sesión de {nombreUsuario}", "Sesión cerrada",
@@ -181,10 +296,10 @@ namespace GUI
                 // Verificar si quedan usuarios en sesión
                 if (Sesion.Get(0) == null && Sesion.Get(1) == null)
                 {
-                    // Si no quedan usuarios, volver al formulario de login
+
                     Log formLogin = new Log();
                     formLogin.Show();
-                    this.Hide(); // O this.Hide() si prefieres ocultarlo en lugar de cerrarlo
+                    this.Hide(); 
                 }
             }
         }
@@ -207,22 +322,17 @@ namespace GUI
             Usuario usuario = Sesion.Get(1);
             if (usuario != null)
             {
-                // Guardamos el nombre para el mensaje
+
                 string nombreUsuario = usuario.Nombre;
-
-                // Eliminar usuario de la sesión
                 Sesion.Eliminar(usuario);
-
-                // Actualizar la interfaz
                 label2.Text = "No iniciado";
 
                 MessageBox.Show($"Se cerró la sesión de {nombreUsuario}", "Sesión cerrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Verificar si quedan usuarios en sesión
                 if (Sesion.Get(0) == null && Sesion.Get(1) == null)
                 {
-                    // Si no quedan usuarios, volver al formulario de login
+
                     Log formLogin = new Log();
                     formLogin.Show();
                     this.Hide(); 
@@ -233,28 +343,17 @@ namespace GUI
         {
             Begin();
             CrearTablerosVisuales();
-            InicializarDados(); // Inicializar los dados existentes
+            InicializarDados();
             btn_Iniciar.Enabled = false;
             btn_Finalizar.Enabled = true;
+            button6.Enabled = false;
         }
         private void button5_Click(object sender, EventArgs e)
         {
-            // Verificar que la tirada esté inicializada
-            if (tiradaActual == null)
-            {
-                tiradaActual = tiradaService.CrearNuevaTirada(5);
-            }
 
-            // Lanzar los dados (excepto los retenidos)
             tiradaService.LanzarDados(tiradaActual);
-
-            // Actualizar la visualización
-            dadoControl1.ActualizarImagen();
-            dadoControl2.ActualizarImagen();
-            dadoControl3.ActualizarImagen();
-            dadoControl4.ActualizarImagen();
-            dadoControl5.ActualizarImagen();
-            
+            RefrescarTodasImagenes();
+            button6.Enabled = tiradaActual.NumeroLanzamientos > 0;
         }
 
         private void btn_Finalizar_Click(object sender, EventArgs e)
@@ -264,7 +363,7 @@ namespace GUI
             btn_Iniciar.Enabled = true;
         }
         #endregion
-
+        #region "VISUAL"
         private void CrearTablerosVisuales()
         {
             try
@@ -280,10 +379,7 @@ namespace GUI
                 dataGridView2.Columns.Clear();
                 dataGridView2.Columns.Add("categoria", "Categoría");
                 dataGridView2.Columns.Add("puntuacion", "Puntuacion");
-                // Obtener las categorías (usamos el primer tablero disponible como referencia)
-                Tablero tableroReferencia = tableroJugador1 ?? tableroJugador2;
 
-                // Llenar el DataGridView con los datos
                 dataGridView1.Rows.Clear();
 
                 if (tableroJugador1 != null)
@@ -299,7 +395,6 @@ namespace GUI
                         dataGridView1.Rows.Add(row);
                     }
 
-                    // Añadir total
                     dataGridView1.Rows.Add(new string[]
                     {
                 "TOTAL",
@@ -307,7 +402,6 @@ namespace GUI
                     });
                 }
 
-                // Llenar datos para jugador 2
                 if (tableroJugador2 != null)
                 {
                     dataGridView2.Rows.Clear();
@@ -334,22 +428,23 @@ namespace GUI
                 MessageBox.Show($"Error al mostrar tableros: {ex.Message}", "Error",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
-
         }
-
-        
-
+        public void RefrescarTodasImagenes()
+        {
+            dadoControl1.ActualizarImagen();
+            dadoControl2.ActualizarImagen();
+            dadoControl3.ActualizarImagen();
+            dadoControl4.ActualizarImagen();
+            dadoControl5.ActualizarImagen();
+        }
+        #endregion
         private void InicializarDados()
         {
             try
             {
-                // Crear instancia de Tirada con 5 dados
                 tiradaActual = tiradaService.CrearNuevaTirada(5);
-                
-                // Referencias directas a los controles de dado
                 DadoControl[] dadosControles = new DadoControl[5] {
-                    dadoControl1, // Usar directamente los controles nombrados
+                    dadoControl1, 
                     dadoControl2,
                     dadoControl3, 
                     dadoControl4,
@@ -359,14 +454,12 @@ namespace GUI
                
                 for (int i = 0; i < dadosControles.Length && i < tiradaActual.Dados.Count; i++)
                 {
-                    // Asignar el objeto Dado al control visual
+                    
                     dadosControles[i].Dado = tiradaActual.Dados[i];
                   
                     tiradaActual.Dados[i].Valor = i + 1;
                     dadosControles[i].ActualizarImagen();
-                }
-                
-                
+                }  
             }
             catch (Exception ex)
             {
@@ -374,12 +467,10 @@ namespace GUI
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void dadoControl5_Load(object sender, EventArgs e)
         {
 
         }
-
     
     }
     }
