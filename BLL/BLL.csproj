@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitacoraService.cs" />
     <Compile Include="DadoService.cs" />
     <Compile Include="Gestor_Partida.cs" />
     <Compile Include="Gestor_Puntaje.cs" />

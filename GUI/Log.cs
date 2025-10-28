@@ -61,8 +61,9 @@ namespace GUI
                 // Validar credenciales
                 Usuario usuarioLogueado = usuario.ValidarLogin(textBox1.Text, textBox2.Text);
                 sesion.Agregar(usuarioLogueado);
+                BLL.BitacoraService bitacora = new BLL.BitacoraService();
+                bitacora.RegistrarLogin(usuarioLogueado);
                 MessageBox.Show($"¡Bienvenido {usuarioLogueado.Nombre}!", "Login Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                 
                 // Abrir formulario del juego
                 Form1 formJuego = new Form1();
                 formJuego.Show();
