@@ -39,10 +39,13 @@ namespace BLL
             string nombres = string.Join(", ", jugadores.Select(j => j.Nombre));
             Registrar("InicioPartida", null, $"Se comenzó una partida. Los jugadores son {nombres}");
         }
-        public void RegistrarFin(List<Usuario> jugadores)
+        public void RegistrarFin(List<Usuario> jugadores, Usuario ganador = null)
         {
-            string nombres = string.Join(", ", jugadores.Select(j => j.Nombre));
-            Registrar("FinPartida", null, $"Se finalizó una partida. Los jugadores son {nombres}");
+            string nombres = string.Join(" y ", jugadores.Select(j => j.Nombre));
+            string desc = ganador != null
+                ? $"Se finalizó la partida entre {nombres}. El ganador fue {ganador.Nombre}"
+                : $"Se finalizó la partida entre {nombres}. La partida terminó en empate";
+            Registrar("FinPartida", null, desc);
         }
     }
 }

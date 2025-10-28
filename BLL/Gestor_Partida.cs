@@ -1,5 +1,4 @@
 ﻿using BE;
-using System;
 using System.Collections.Generic;
 
 namespace BLL
@@ -9,72 +8,50 @@ namespace BLL
         private Partida _partidaActual;
         private Gestor_Turno _gestorTurnos;
 
-        public Gestor_Partida()
-        {
-            _gestorTurnos = new Gestor_Turno();
-        }
-
         public void IniciarPartida(List<Usuario> usuariosenpartida)
         {
-            _partidaActual = new Partida();
+            _partidaActual = new Partida
+            {
+                PuntajeJugador1 = 0,
+                PuntajeJugador2 = 0,
+                HistorialTurnos = new List<Turno>()
+            };
+            _gestorTurnos = new Gestor_Turno();
             _gestorTurnos.InicializarJugadores(usuariosenpartida);
-        }
-
-        public void FinalizarPartida(Usuario ganador = null)
-        {
-            if (_partidaActual == null) return;
-
-            _partidaActual.FechaFin = DateTime.Now;
-            _partidaActual.Ganador = ganador ?? CalcularGanadorPorPuntaje();
         }
 
         public void SumarPuntos(int jugadorIndice, int puntos)
         {
             if (_partidaActual == null) return;
-
-            if (jugadorIndice == 0)
-                _partidaActual.PuntajeJugador1 += puntos;
-            else if (jugadorIndice == 1)
-                _partidaActual.PuntajeJugador2 += puntos;
+            if (jugadorIndice == 0) _partidaActual.PuntajeJugador1 += puntos;
+            else if (jugadorIndice == 1) _partidaActual.PuntajeJugador2 += puntos;
         }
 
-        public Usuario ObtenerJugadorActual()
+        public void FinalizarPartida(Usuario ganador = null)
         {
-            return _gestorTurnos.UsuarioActual;
-        }
-
-        public void CambiarTurno()
-        {
-            _gestorTurnos.Cambiar();
-        }
-
-        public Partida ObtenerPartidaActual()
-        {
-            return _partidaActual;
+            if (_partidaActual == null) return;
+            _partidaActual.FechaFin = System.DateTime.Now;
+            // Si no viene, calcular por puntaje
+            _partidaActual.Ganador = ganador ?? CalcularGanadorPorPuntaje();
         }
 
         public Usuario Ganador()
         {
             if (_partidaActual == null) return null;
-            if (_partidaActual.Ganador != null) return _partidaActual.Ganador;
-
-            return CalcularGanadorPorPuntaje();
+            return _partidaActual.Ganador ?? CalcularGanadorPorPuntaje();
         }
 
         private Usuario CalcularGanadorPorPuntaje()
         {
-            if (_partidaActual == null || _gestorTurnos == null || _gestorTurnos.Usuarios == null || _gestorTurnos.Usuarios.Count < 2)
-                return null;
+            if (_gestorTurnos == null || _gestorTurnos.Usuarios == null || _gestorTurnos.Usuarios.Count < 2) return null;
 
-            if (_partidaActual.PuntajeJugador1 > _partidaActual.PuntajeJugador2)
-                return _gestorTurnos.Usuarios[0];
-
-            if (_partidaActual.PuntajeJugador2 > _partidaActual.PuntajeJugador1)
-                return _gestorTurnos.Usuarios[1];
-
-            // Empate
-            return null;
+            if (_partidaActual.PuntajeJugador1 > _partidaActual.PuntajeJugador2) return _gestorTurnos.Usuarios[0];
+            if (_partidaActual.PuntajeJugador2 > _partidaActual.PuntajeJugador1) return _gestorTurnos.Usuarios[1];
+            return null; // empate
         }
+
+        public Usuario ObtenerJugadorActual() => _gestorTurnos?.UsuarioActual;
+        public void CambiarTurno() => _gestorTurnos?.Cambiar();
     }
 }
 

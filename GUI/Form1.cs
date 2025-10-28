@@ -257,7 +257,8 @@ namespace GUI
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-
+                int jugadorIndice = (tableroActual == tableroJugador1) ? 0 : 1;
+                gestorpartida.SumarPuntos(jugadorIndice, puntos);
                 CrearTablerosVisuales();
                 tiradaService.ReiniciarTirada(tiradaActual);
                 checkBox1.Checked = false;
@@ -330,7 +331,7 @@ namespace GUI
 
                 MessageBox.Show($"Se cerró la sesión de {nombreUsuario}", "Sesión cerrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                bitacora.RegistrarLogout(usuario);
                 if (Sesion.Get(0) == null && Sesion.Get(1) == null)
                 {
 
@@ -364,17 +365,17 @@ namespace GUI
 
         private void btn_Finalizar_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
+
             gestorpartida.FinalizarPartida();
             var ganador = gestorpartida.Ganador();
             var mensajeGanador = ganador != null ? $"El ganador ha sido {ganador.Nombre}" : "La partida ha finalizado en empate.";
             MessageBox.Show($"La partida ha finalizado. {mensajeGanador}", "Partida finalizada");
-=======
+
             List<Usuario> jugadores = new List<Usuario>();
             if (Sesion.Get(0) != null) jugadores.Add(Sesion.Get(0));
             if (Sesion.Get(1) != null) jugadores.Add(Sesion.Get(1));
-            bitacora.RegistrarFin(jugadores);
->>>>>>> SIRVE BITACORA
+            bitacora.RegistrarFin(jugadores, ganador);
+
             btn_Finalizar.Enabled = false;
             btn_Iniciar.Enabled = true;
         }
