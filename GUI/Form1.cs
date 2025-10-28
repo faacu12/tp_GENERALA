@@ -169,7 +169,7 @@ namespace GUI
             gridActual = null;
             tableroActual = null;
 
-            var jugadorActual = gestorpartida.ObtenerJugadorActual();
+            BE.Usuario jugadorActual = gestorpartida.ObtenerJugadorActual();
             if (jugadorActual == null) return false;
 
             if (tableroJugador1 != null && tableroJugador1.Jugador == jugadorActual)
