@@ -40,6 +40,7 @@ namespace GUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
             checkBox2.CheckedChanged += CheckBox2_CheckedChanged;
             checkBox3.CheckedChanged += CheckBox3_CheckedChanged;
