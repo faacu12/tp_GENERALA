@@ -16,16 +16,25 @@ namespace BLL
         private void Registrar(string tipo, int? usuarioId, string descripcion)
         {
             acceso.Abrir();
-            List<SqlParameter> parametros = new List<SqlParameter>();
-            parametros.Add(acceso.CrearParametro("@Tip", tipo));
-            parametros.Add(acceso.CrearParametro("@Desc", descripcion ?? string.Empty));
-            parametros.Add(
-                usuarioId.HasValue
-                    ? acceso.CrearParametro("@idus", usuarioId.Value)
-                    : new SqlParameter("@idus", DBNull.Value) { DbType = DbType.Int32, IsNullable = true }
-            );
-            acceso.Escribir("Bitacora_Insertar", parametros);
+            try
+            {
+                List<SqlParameter> parametros = new List<SqlParameter>();
+                parametros.Add(acceso.CrearParametro("@Tip", tipo));
+                parametros.Add(acceso.CrearParametro("@Desc", descripcion ?? string.Empty));
+                parametros.Add(
+                    usuarioId.HasValue
+                        ? acceso.CrearParametro("@idus", usuarioId.Value)
+                        : new SqlParameter("@idus", DBNull.Value) { DbType = DbType.Int32, IsNullable = true }
+                );
+
+                acceso.Escribir("Bitacora_Insertar", parametros);
+            }
+            finally
+            {
+                acceso.Cerrar();
+            }
         }
+        
         public void RegistrarLogin(Usuario usuario)
         {
             Registrar("InicioSesión", usuario?.Id, $"Inicio de sesión de {usuario?.Nombre}");
@@ -43,7 +52,7 @@ namespace BLL
         {
             string nombres = string.Join(" y ", jugadores.Select(j => j.Nombre));
             string desc = ganador != null
-                ? $"Se finalizó la partida entre {nombres}. El ganador fue {ganador.Nombre}"
+                ? $"Se finalizó la partida entre {nombres}. Ganó {ganador.Nombre}"
                 : $"Se finalizó la partida entre {nombres}. La partida terminó en empate";
             Registrar("FinPartida", null, desc);
         }
