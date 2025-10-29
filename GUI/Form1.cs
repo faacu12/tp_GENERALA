@@ -295,6 +295,7 @@ namespace GUI
                 MessageBox.Show($"Se cerró la sesión de {nombreUsuario}", "Sesión cerrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 bitacora.RegistrarLogout(usuario);
+               
                 // Verificar si quedan usuarios en sesión
                 if (Sesion.Get(0) == null && Sesion.Get(1) == null)
                 {
@@ -332,6 +333,7 @@ namespace GUI
                 MessageBox.Show($"Se cerró la sesión de {nombreUsuario}", "Sesión cerrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 bitacora.RegistrarLogout(usuario);
+                
                 if (Sesion.Get(0) == null && Sesion.Get(1) == null)
                 {
 
@@ -488,6 +490,78 @@ namespace GUI
         {
 
         }
-    
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (tiradaActual == null || tiradaActual.NumeroLanzamientos != 3)
+                {
+                    MessageBox.Show("Debe quedarse sin tiros para tachar.", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                if(!TryObtenerGridYTableroActual(out DataGridView gridActual, out Tablero tableroActual))
+                {
+                    MessageBox.Show("No hay jugador activo o tablero asociado.", "Atención",
+               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+                DataGridViewRow row = gridActual.CurrentRow;
+                if(row == null || row.Index  < 0)
+                {
+                    MessageBox.Show("Selecciona una fila de categoría.", "Atención",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+                string categoriaNombre = row.Cells[0].Value.ToString();
+                if(string.IsNullOrEmpty(categoriaNombre) || categoriaNombre == "Total")
+                {
+                    MessageBox.Show("Selecciona una categoría válida (no TOTAL).", "Atención",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }
+                BE.Categoria categoria = tableroActual.Categorias.FirstOrDefault(c => c.Nombre == categoriaNombre);
+                if (categoria.Utilizada)
+                {
+                    MessageBox.Show("Esa categoría ya fue utilizada.", "Atención",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                bool ok = tableroService.AnotarPuntuacion(tableroActual, categoriaNombre, 0);
+                if (!ok)
+                {
+                    MessageBox.Show("No se pudo tachar la categoría.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Sumar 0 (no cambia puntaje, pero deja el flujo explícito)
+                int jugadorIndice = (tableroActual == tableroJugador1) ? 0 : 1;
+                gestorpartida.SumarPuntos(jugadorIndice, 0);
+
+                // Mismo flujo que al anotar
+                CrearTablerosVisuales();
+                tiradaService.ReiniciarTirada(tiradaActual);
+                checkBox1.Checked = false;
+                checkBox2.Checked = false;
+                checkBox3.Checked = false;
+                checkBox4.Checked = false;
+                checkBox5.Checked = false;
+                RefrescarTodasImagenes();
+                button6.Enabled = false;
+                gestorpartida.CambiarTurno();
+                RefreshTurno();
+
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show($"Error al tachar: {ex.Message}", "Error",
+                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
     }
