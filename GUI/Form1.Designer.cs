@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            BE.Dado dado6 = new BE.Dado();
-            BE.Dado dado7 = new BE.Dado();
-            BE.Dado dado8 = new BE.Dado();
-            BE.Dado dado9 = new BE.Dado();
-            BE.Dado dado10 = new BE.Dado();
+            BE.Dado dado1 = new BE.Dado();
+            BE.Dado dado2 = new BE.Dado();
+            BE.Dado dado3 = new BE.Dado();
+            BE.Dado dado4 = new BE.Dado();
+            BE.Dado dado5 = new BE.Dado();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -56,6 +56,7 @@
             this.dadoControl3 = new GUI.DadoControl();
             this.dadoControl2 = new GUI.DadoControl();
             this.dadoControl1 = new GUI.DadoControl();
+            this.button7 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -239,9 +240,9 @@
             // 
             // dadoControl5
             // 
-            dado6.Retenido = false;
-            dado6.Valor = 1;
-            this.dadoControl5.Dado = dado6;
+            dado1.Retenido = false;
+            dado1.Valor = 1;
+            this.dadoControl5.Dado = dado1;
             this.dadoControl5.Location = new System.Drawing.Point(799, 124);
             this.dadoControl5.Margin = new System.Windows.Forms.Padding(4);
             this.dadoControl5.Name = "dadoControl5";
@@ -251,9 +252,9 @@
             // 
             // dadoControl4
             // 
-            dado7.Retenido = false;
-            dado7.Valor = 1;
-            this.dadoControl4.Dado = dado7;
+            dado2.Retenido = false;
+            dado2.Valor = 1;
+            this.dadoControl4.Dado = dado2;
             this.dadoControl4.Location = new System.Drawing.Point(692, 124);
             this.dadoControl4.Margin = new System.Windows.Forms.Padding(4);
             this.dadoControl4.Name = "dadoControl4";
@@ -262,9 +263,9 @@
             // 
             // dadoControl3
             // 
-            dado8.Retenido = false;
-            dado8.Valor = 1;
-            this.dadoControl3.Dado = dado8;
+            dado3.Retenido = false;
+            dado3.Valor = 1;
+            this.dadoControl3.Dado = dado3;
             this.dadoControl3.Location = new System.Drawing.Point(572, 124);
             this.dadoControl3.Margin = new System.Windows.Forms.Padding(4);
             this.dadoControl3.Name = "dadoControl3";
@@ -273,9 +274,9 @@
             // 
             // dadoControl2
             // 
-            dado9.Retenido = false;
-            dado9.Valor = 1;
-            this.dadoControl2.Dado = dado9;
+            dado4.Retenido = false;
+            dado4.Valor = 1;
+            this.dadoControl2.Dado = dado4;
             this.dadoControl2.Location = new System.Drawing.Point(450, 124);
             this.dadoControl2.Margin = new System.Windows.Forms.Padding(4);
             this.dadoControl2.Name = "dadoControl2";
@@ -284,20 +285,30 @@
             // 
             // dadoControl1
             // 
-            dado10.Retenido = false;
-            dado10.Valor = 1;
-            this.dadoControl1.Dado = dado10;
+            dado5.Retenido = false;
+            dado5.Valor = 1;
+            this.dadoControl1.Dado = dado5;
             this.dadoControl1.Location = new System.Drawing.Point(337, 124);
             this.dadoControl1.Margin = new System.Windows.Forms.Padding(4);
             this.dadoControl1.Name = "dadoControl1";
             this.dadoControl1.Size = new System.Drawing.Size(95, 90);
             this.dadoControl1.TabIndex = 11;
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(578, 411);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 23;
+            this.button7.Text = "Anotar";
+            this.button7.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1252, 584);
+            this.Controls.Add(this.button7);
             this.Controls.Add(this.checkBox5);
             this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.checkBox3);
@@ -357,6 +368,7 @@
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.Button button7;
     }
 }
 
