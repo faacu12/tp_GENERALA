@@ -369,8 +369,8 @@ namespace GUI
         {
 
             gestorpartida.FinalizarPartida();
-            var ganador = gestorpartida.Ganador();
-            var mensajeGanador = ganador != null ? $"El ganador ha sido {ganador.Nombre}" : "La partida ha finalizado en empate.";
+            BE.Usuario ganador = gestorpartida.Ganador();
+            string mensajeGanador = ganador != null ? $"Ganó {ganador.Nombre}" : "La partida ha finalizado en empate.";
             MessageBox.Show($"La partida ha finalizado. {mensajeGanador}", "Partida finalizada");
 
             List<Usuario> jugadores = new List<Usuario>();
