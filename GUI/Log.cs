@@ -16,6 +16,7 @@ namespace GUI
     {
         private USUARIO usuario = new USUARIO();
         private Sesion sesion = new Sesion();
+        BLL.BitacoraService bitacora = new BLL.BitacoraService();
         public Log()
         {
             InitializeComponent();
@@ -41,7 +42,7 @@ namespace GUI
                 
                 sesion.Agregar(nuevoUsuario);
                 MessageBox.Show("Usuario creado exitosamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                bitacora.RegistrarCreacionUsuario(nuevoUsuario);
                 // Abrir formulario del juego
                 Form1 formJuego = new Form1();
                 formJuego.Show();

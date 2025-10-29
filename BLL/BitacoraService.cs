@@ -34,6 +34,8 @@ namespace BLL
                 acceso.Cerrar();
             }
         }
+
+
         
         public void RegistrarLogin(Usuario usuario)
         {
@@ -56,5 +58,10 @@ namespace BLL
                 : $"Se finalizó la partida entre {nombres}. La partida terminó en empate";
             Registrar("FinPartida", null, desc);
         }
+        public void RegistrarCreacionUsuario(Usuario usuario)
+        {
+            Registrar("CreaciónUsuario", usuario?.Id, $"Se creó el usuario {usuario?.Nombre}");
+        }
+
     }
 }
