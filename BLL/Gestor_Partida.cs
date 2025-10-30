@@ -1,5 +1,7 @@
 ﻿using BE;
+using DAL;
 using System.Collections.Generic;
+using System.Data;
 
 namespace BLL
 {
@@ -7,6 +9,7 @@ namespace BLL
     {
         private Partida _partidaActual;
         private Gestor_Turno _gestorTurnos;
+        private XmlBitacora xmlbitacora;
 
         public void IniciarPartida(List<Usuario> usuariosenpartida)
         {
@@ -25,14 +28,20 @@ namespace BLL
             if (_partidaActual == null) return;
             if (jugadorIndice == 0) _partidaActual.PuntajeJugador1 += puntos;
             else if (jugadorIndice == 1) _partidaActual.PuntajeJugador2 += puntos;
+            var turno = new Turno
+            {
+                JugadorActual = ObtenerJugadorActual(),
+                NumeroTurno = (_partidaActual.HistorialTurnos?.Count ?? 0) + 1
+            };
+            _partidaActual.HistorialTurnos.Add(turno);
         }
 
         public void FinalizarPartida(Usuario ganador = null)
         {
             if (_partidaActual == null) return;
             _partidaActual.FechaFin = System.DateTime.Now;
-            // Si no viene, calcular por puntaje
             _partidaActual.Ganador = ganador ?? CalcularGanadorPorPuntaje();
+           
         }
 
         public Usuario Ganador()
@@ -47,11 +56,28 @@ namespace BLL
 
             if (_partidaActual.PuntajeJugador1 > _partidaActual.PuntajeJugador2) return _gestorTurnos.Usuarios[0];
             if (_partidaActual.PuntajeJugador2 > _partidaActual.PuntajeJugador1) return _gestorTurnos.Usuarios[1];
-            return null; // empate
+            return null; 
         }
+        public DataTable ConsultarTurnos()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("NroTurno", typeof(int));
+            dt.Columns.Add("Jugador", typeof(string));
 
+            if (_partidaActual?.HistorialTurnos != null)
+            {
+                foreach (Turno t in _partidaActual.HistorialTurnos)
+                {
+                    dt.Rows.Add(t.NumeroTurno, t.JugadorActual?.Nombre);
+                }
+            }
+            return dt;
+        }
         public Usuario ObtenerJugadorActual() => _gestorTurnos?.UsuarioActual;
-        public void CambiarTurno() => _gestorTurnos?.Cambiar();
+        public void CambiarTurno()
+        {
+            _gestorTurnos?.Cambiar();
+        }
     }
 }
 

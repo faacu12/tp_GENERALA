@@ -33,7 +33,6 @@ namespace BLL
                 new Categoria { Nombre = "Doble Generala", Descripcion = "Segunda Generala", Tipo = TipoCategoria.Juego }
             };
         }
-
         public bool AnotarPuntuacion(Tablero tablero, string nombreCategoria, int puntos)
         {
             var categoria = tablero.Categorias.FirstOrDefault(c => c.Nombre == nombreCategoria);

@@ -103,6 +103,13 @@ namespace GUI
             }
         }
         #endregion
+        private void RefrescarBitacoraMovimientos()
+        {
+            // Ejemplo: solo los de hoy; quita el filtro si quieres todo el historial
+            DataTable tabla = bitacora.ConsultarMovimientos(desde: DateTime.Today);
+            dataGridView3.AutoGenerateColumns = true;
+            dataGridView3.DataSource = tabla;
+        }
         private void Begin()
         {
             try
@@ -271,6 +278,10 @@ namespace GUI
                 button6.Enabled = false;
                 gestorpartida.CambiarTurno();
                 RefreshTurno();
+
+                var jugadorAccion = gestorpartida.ObtenerJugadorActual();
+                bitacora.RegistrarMovimiento("Anotar", jugadorAccion, categoriaNombre, puntos, tiradaActual.NumeroLanzamientos);
+                RefrescarBitacoraMovimientos();
             }
             catch (Exception ex)
             {
@@ -556,7 +567,9 @@ namespace GUI
                 button6.Enabled = false;
                 gestorpartida.CambiarTurno();
                 RefreshTurno();
-
+                var jugadorAccion = gestorpartida.ObtenerJugadorActual();
+                bitacora.RegistrarMovimiento("Tachar", jugadorAccion, categoriaNombre, 0, tiradaActual?.NumeroLanzamientos ?? 0);
+                RefrescarBitacoraMovimientos();
             }
             catch (Exception ex) 
             {

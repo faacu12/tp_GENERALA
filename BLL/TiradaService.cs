@@ -30,7 +30,6 @@ namespace BLL
                 tirada.NumeroLanzamientos++;
             }
         }
-
         public void RetenerDado(Tirada tirada, int indice, bool retener)
         {
             if (indice >= 0 && indice < tirada.Dados.Count)
