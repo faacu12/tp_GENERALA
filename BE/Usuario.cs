@@ -32,9 +32,5 @@ namespace BE
 			get { return contra; }
 			set { contra = value; }
 		}
-
-
-
-
-	}
+    }
 }

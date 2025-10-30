@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            BE.Dado dado6 = new BE.Dado();
-            BE.Dado dado7 = new BE.Dado();
-            BE.Dado dado8 = new BE.Dado();
-            BE.Dado dado9 = new BE.Dado();
-            BE.Dado dado10 = new BE.Dado();
+            BE.Dado dado1 = new BE.Dado();
+            BE.Dado dado2 = new BE.Dado();
+            BE.Dado dado3 = new BE.Dado();
+            BE.Dado dado4 = new BE.Dado();
+            BE.Dado dado5 = new BE.Dado();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -64,7 +64,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(250, 65);
+            this.label1.Location = new System.Drawing.Point(127, 32);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(64, 16);
@@ -74,7 +74,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1344, 23);
+            this.label2.Location = new System.Drawing.Point(1337, 32);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 16);
@@ -105,7 +105,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(83, 533);
+            this.button3.Location = new System.Drawing.Point(83, 520);
             this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(167, 28);
@@ -160,7 +160,7 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(16, 65);
+            this.dataGridView1.Location = new System.Drawing.Point(13, 65);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
@@ -171,11 +171,11 @@
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(1197, 43);
+            this.dataGridView2.Location = new System.Drawing.Point(1198, 65);
             this.dataGridView2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowHeadersWidth = 51;
-            this.dataGridView2.Size = new System.Drawing.Size(320, 434);
+            this.dataGridView2.Size = new System.Drawing.Size(320, 412);
             this.dataGridView2.TabIndex = 10;
             this.dataGridView2.Visible = false;
             // 
@@ -269,9 +269,9 @@
             // 
             // dadoControl5
             // 
-            dado6.Retenido = false;
-            dado6.Valor = 1;
-            this.dadoControl5.Dado = dado6;
+            dado1.Retenido = false;
+            dado1.Valor = 1;
+            this.dadoControl5.Dado = dado1;
             this.dadoControl5.Location = new System.Drawing.Point(1065, 153);
             this.dadoControl5.Margin = new System.Windows.Forms.Padding(5);
             this.dadoControl5.Name = "dadoControl5";
@@ -281,9 +281,9 @@
             // 
             // dadoControl4
             // 
-            dado7.Retenido = false;
-            dado7.Valor = 1;
-            this.dadoControl4.Dado = dado7;
+            dado2.Retenido = false;
+            dado2.Valor = 1;
+            this.dadoControl4.Dado = dado2;
             this.dadoControl4.Location = new System.Drawing.Point(923, 150);
             this.dadoControl4.Margin = new System.Windows.Forms.Padding(5);
             this.dadoControl4.Name = "dadoControl4";
@@ -292,9 +292,9 @@
             // 
             // dadoControl3
             // 
-            dado8.Retenido = false;
-            dado8.Valor = 1;
-            this.dadoControl3.Dado = dado8;
+            dado3.Retenido = false;
+            dado3.Valor = 1;
+            this.dadoControl3.Dado = dado3;
             this.dadoControl3.Location = new System.Drawing.Point(763, 153);
             this.dadoControl3.Margin = new System.Windows.Forms.Padding(5);
             this.dadoControl3.Name = "dadoControl3";
@@ -303,9 +303,9 @@
             // 
             // dadoControl2
             // 
-            dado9.Retenido = false;
-            dado9.Valor = 1;
-            this.dadoControl2.Dado = dado9;
+            dado4.Retenido = false;
+            dado4.Valor = 1;
+            this.dadoControl2.Dado = dado4;
             this.dadoControl2.Location = new System.Drawing.Point(620, 153);
             this.dadoControl2.Margin = new System.Windows.Forms.Padding(5);
             this.dadoControl2.Name = "dadoControl2";
@@ -314,9 +314,9 @@
             // 
             // dadoControl1
             // 
-            dado10.Retenido = false;
-            dado10.Valor = 1;
-            this.dadoControl1.Dado = dado10;
+            dado5.Retenido = false;
+            dado5.Valor = 1;
+            this.dadoControl1.Dado = dado5;
             this.dadoControl1.Location = new System.Drawing.Point(449, 153);
             this.dadoControl1.Margin = new System.Windows.Forms.Padding(5);
             this.dadoControl1.Name = "dadoControl1";
@@ -329,7 +329,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1544, 625);
+            this.ClientSize = new System.Drawing.Size(1544, 632);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.checkBox5);
             this.Controls.Add(this.checkBox4);

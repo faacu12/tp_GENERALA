@@ -45,7 +45,6 @@
     <Compile Include="MAPPER.cs" />
     <Compile Include="MP_USUARIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Xml.cs" />
     <Compile Include="XmlBitacora.cs" />
   </ItemGroup>
   <ItemGroup>
