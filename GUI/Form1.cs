@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -103,13 +104,7 @@ namespace GUI
             }
         }
         #endregion
-        private void RefrescarBitacoraMovimientos()
-        {
-            // Ejemplo: solo los de hoy; quita el filtro si quieres todo el historial
-            DataTable tabla = bitacora.ConsultarMovimientos(desde: DateTime.Today);
-            dataGridView3.AutoGenerateColumns = true;
-            dataGridView3.DataSource = tabla;
-        }
+       
         private void Begin()
         {
             try
@@ -277,11 +272,9 @@ namespace GUI
                 RefrescarTodasImagenes();
                 button6.Enabled = false;
                 gestorpartida.CambiarTurno();
-                RefreshTurno();
-
-                var jugadorAccion = gestorpartida.ObtenerJugadorActual();
+                BE.Usuario jugadorAccion = gestorpartida.ObtenerJugadorActual();
                 bitacora.RegistrarMovimiento("Anotar", jugadorAccion, categoriaNombre, puntos, tiradaActual.NumeroLanzamientos);
-                RefrescarBitacoraMovimientos();
+                RefreshTurno();
             }
             catch (Exception ex)
             {
@@ -566,16 +559,21 @@ namespace GUI
                 RefrescarTodasImagenes();
                 button6.Enabled = false;
                 gestorpartida.CambiarTurno();
-                RefreshTurno();
-                var jugadorAccion = gestorpartida.ObtenerJugadorActual();
+                BE.Usuario jugadorAccion = gestorpartida.ObtenerJugadorActual();
                 bitacora.RegistrarMovimiento("Tachar", jugadorAccion, categoriaNombre, 0, tiradaActual?.NumeroLanzamientos ?? 0);
-                RefrescarBitacoraMovimientos();
+                RefreshTurno(); 
             }
             catch (Exception ex) 
             {
                 MessageBox.Show($"Error al tachar: {ex.Message}", "Error",
                            MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Form2 frm = new Form2();
+            frm.Show();
         }
     }
     }
