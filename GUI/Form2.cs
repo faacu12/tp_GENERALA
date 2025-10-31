@@ -34,5 +34,10 @@ namespace GUI
                 dataGridView3.DataSource = tabla;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
