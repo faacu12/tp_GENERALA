@@ -14,8 +14,8 @@ namespace GUI
 {
     public partial class Log : Form
     {
+        BLL.Sesion sesion = new BLL.Sesion();
         private USUARIO usuario = new USUARIO();
-        private Sesion sesion = new Sesion();
         BLL.BitacoraService bitacora = new BLL.BitacoraService();
         public Log()
         {
@@ -85,7 +85,7 @@ namespace GUI
 
         private void Log_Shown(object sender, EventArgs e)
         {
-            if (Sesion.Get(0) != null || Sesion.Get(1) != null)
+            if (sesion.Get(0) != null || sesion.Get(1) != null)
             {
                 button3.Visible = true;
             }

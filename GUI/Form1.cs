@@ -15,6 +15,7 @@ namespace GUI
 {
     public partial class Form1 : Form
     {
+        private Sesion sesion = new Sesion();
         private Gestor_Partida gestorpartida = new Gestor_Partida();
         private TiradaService tiradaService = new TiradaService();
         private readonly Gestor_Puntaje gestorPuntaje = new Gestor_Puntaje();
@@ -110,11 +111,11 @@ namespace GUI
             try
             {
                 List<Usuario> usuariosenpartida = new List<Usuario>();
-                if (Sesion.Get(0) != null) usuariosenpartida.Add(Sesion.Get(0));
-                if (Sesion.Get(1) != null) usuariosenpartida.Add(Sesion.Get(1));
+                if (sesion.Get(0) != null) usuariosenpartida.Add(sesion.Get(0));
+                if (sesion.Get(1) != null) usuariosenpartida.Add(sesion.Get(1));
                 gestorpartida.IniciarPartida(usuariosenpartida);
-                tableroJugador1 = tableroService.CrearTablero(Sesion.Get(0));
-                tableroJugador2 = tableroService.CrearTablero(Sesion.Get(1));
+                tableroJugador1 = tableroService.CrearTablero(sesion.Get(0));
+                tableroJugador2 = tableroService.CrearTablero(sesion.Get(1));
                 RefreshTurno();
             }
             catch (Exception ex)
@@ -126,24 +127,25 @@ namespace GUI
        
         private void Form1_Shown(object sender, EventArgs e)
         {
-            if (Sesion.Get(0) != null)
+            if (sesion.Get(0) != null)
             {
                 button3.Visible = false;
             }
-            if (Sesion.Get(1) != null)
+            if (sesion.Get(1) != null)
             {
                 button4.Visible = false;
             }
-            Usuario usuario1 = Sesion.Get(0);
+            Usuario usuario1 = sesion.Get(0);
             if (usuario1 != null)
             {
                 label1.Text = usuario1.Nombre.ToString();
             }
-            Usuario usuario2 = Sesion.Get(1);
+            Usuario usuario2 = sesion.Get(1);
             if (usuario2 != null)
             {
                 label2.Text = usuario2.Nombre.ToString();
             }
+            
         }
         public void RefreshTurno()
         {
@@ -285,7 +287,7 @@ namespace GUI
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            Usuario usuario = Sesion.Get(0);
+            Usuario usuario = sesion.Get(0);
             if (usuario != null)
             {
                 // Guardamos el nombre para el mensaje
@@ -300,9 +302,10 @@ namespace GUI
                 MessageBox.Show($"Se cerró la sesión de {nombreUsuario}", "Sesión cerrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 bitacora.RegistrarLogout(usuario);
-               
+                dataGridView1.DataSource = null;
+                dataGridView1.Visible = false;
                 // Verificar si quedan usuarios en sesión
-                if (Sesion.Get(0) == null && Sesion.Get(1) == null)
+                if (sesion.Get(0) == null && sesion.Get(1) == null)
                 {
 
                     Log formLogin = new Log();
@@ -327,7 +330,15 @@ namespace GUI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Usuario usuario = Sesion.Get(1);
+            Usuario usuario;
+            if (sesion.Get(1) != null)
+            {
+                 usuario = sesion.Get(1);
+            }
+            else
+            {
+                usuario = sesion.Get(0);
+            }
             if (usuario != null)
             {
 
@@ -338,13 +349,13 @@ namespace GUI
                 MessageBox.Show($"Se cerró la sesión de {nombreUsuario}", "Sesión cerrada",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 bitacora.RegistrarLogout(usuario);
-                
-                if (Sesion.Get(0) == null && Sesion.Get(1) == null)
+
+                if (sesion.Get(0) == null && sesion.Get(1) == null)
                 {
 
                     Log formLogin = new Log();
                     formLogin.Show();
-                    this.Hide(); 
+                    this.Hide();
                 }
             }
         }
@@ -354,8 +365,8 @@ namespace GUI
             CrearTablerosVisuales();
             InicializarDados();
             List<Usuario> jugadores = new List<Usuario>();
-            if (Sesion.Get(0) != null) jugadores.Add(Sesion.Get(0));
-            if (Sesion.Get(1) != null) jugadores.Add(Sesion.Get(1));
+            if (sesion.Get(0) != null) jugadores.Add(sesion.Get(0));
+            if (sesion.Get(1) != null) jugadores.Add(sesion.Get(1));
             bitacora.RegistrarInicio(jugadores);
 
             btn_Iniciar.Enabled = false;
@@ -379,10 +390,10 @@ namespace GUI
             MessageBox.Show($"La partida ha finalizado. {mensajeGanador}", "Partida finalizada");
 
             List<Usuario> jugadores = new List<Usuario>();
-            if (Sesion.Get(0) != null) jugadores.Add(Sesion.Get(0));
-            if (Sesion.Get(1) != null) jugadores.Add(Sesion.Get(1));
+            if (sesion.Get(0) != null) jugadores.Add(sesion.Get(0));
+            if (sesion.Get(1) != null) jugadores.Add(sesion.Get(1));
             bitacora.RegistrarFin(jugadores, ganador);
-
+            bitacora.LimpiarBitacora();
             btn_Finalizar.Enabled = false;
             btn_Iniciar.Enabled = true;
         }

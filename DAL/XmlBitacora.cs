@@ -20,28 +20,13 @@ namespace DAL
             Cargar();
         }
 
-        // Registrar evento general (login/logout/inicio/fin)
-        public void Registrar(string tipo, int? usuarioId, string descripcion)
+        public void Limpiar()
         {
-            lock (_sync)
-            {
-                Cargar(); // asegura leer cambios previos
-                DataTable t = _ds.Tables["Bitacora"];
-                DataRow r = t.NewRow();
-                r["FechaHora"] = DateTime.Now;
-                r["Tipo"] = tipo ?? string.Empty;
-                r["UsuarioId"] = (object)usuarioId ?? DBNull.Value;
-                r["Accion"] = DBNull.Value;
-                r["Jugador"] = DBNull.Value;
-                r["Categoria"] = DBNull.Value;
-                r["Puntos"] = DBNull.Value;
-                r["Turno"] = DBNull.Value;
-                r["Mensaje"] = descripcion ?? string.Empty;
-                t.Rows.Add(r);
-                Guardar();
-            }
+            Cargar();
+            DataTable t = _ds.Tables["Bitacora"];
+            t.Rows.Clear();
+            Guardar();
         }
-
         // Registrar movimiento de partida (anotar/tachar)
         public void RegistrarMovimiento(string accion, int? usuarioId, string jugadorNombre, string categoria, int puntos, int turno)
         {

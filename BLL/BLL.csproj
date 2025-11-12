@@ -47,6 +47,7 @@
     <Compile Include="Gestor_Puntaje.cs" />
     <Compile Include="Gestor_Turno.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sesion.cs" />
     <Compile Include="TableroService.cs" />
     <Compile Include="TiradaService.cs" />
     <Compile Include="USUARIO.cs" />

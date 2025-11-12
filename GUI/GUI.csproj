@@ -72,7 +72,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sesion.cs" />
     <EmbeddedResource Include="DadoControl.resx">
       <DependentUpon>DadoControl.cs</DependentUpon>
     </EmbeddedResource>

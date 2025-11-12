@@ -27,17 +27,19 @@ namespace BLL
                     : new SqlParameter("@idus", DBNull.Value) { DbType = DbType.Int32, IsNullable = true }
             );
             acceso.Escribir("Bitacora_Insertar", parametros);
-
-            // Espejo en XML (evento general)
-            xmlBitacora.Registrar(tipo, usuarioId, descripcion);
+            acceso.Cerrar();
+            
         }
 
-        // NUEVO: registrar movimiento de partida en XML (anotar/tachar)
+        // XML 
         public void RegistrarMovimiento(string accion, Usuario jugador, string categoria, int puntos, int turno)
         {
             xmlBitacora.RegistrarMovimiento(accion, jugador?.Id, jugador?.Nombre, categoria, puntos, turno);
         }
-
+        public void LimpiarBitacora()
+        {
+            xmlBitacora.Limpiar();
+        }
         public void RegistrarLogin(Usuario usuario)
         {
             Registrar("InicioSesión", usuario?.Id, $"Inicio de sesión de {usuario?.Nombre}");
@@ -66,7 +68,6 @@ namespace BLL
 
         public DataTable ConsultarMovimientos(DateTime? desde = null, DateTime? hasta = null, int? usuarioId = null, string accion = null)
         {
-        
             return xmlBitacora.Consultar(desde, hasta, "Movimiento", usuarioId, accion);
         }
     }
