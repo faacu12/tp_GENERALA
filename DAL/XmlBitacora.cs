@@ -43,7 +43,6 @@ namespace DAL
                 r["Categoria"] = categoria ?? string.Empty;
                 r["Puntos"] = puntos;
                 r["Turno"] = turno;
-                r["Mensaje"] = string.Empty; // opcional
                 t.Rows.Add(r);
                 Guardar();
             }
