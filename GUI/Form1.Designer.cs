@@ -57,7 +57,6 @@
             this.dadoControl3 = new GUI.DadoControl();
             this.dadoControl2 = new GUI.DadoControl();
             this.dadoControl1 = new GUI.DadoControl();
-            this.button8 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -304,16 +303,7 @@
             this.dadoControl1.Name = "dadoControl1";
             this.dadoControl1.Size = new System.Drawing.Size(78, 78);
             this.dadoControl1.TabIndex = 11;
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(531, 482);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(149, 23);
-            this.button8.TabIndex = 24;
-            this.button8.Text = "Consultar Movimientos";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.dadoControl1.Load += new System.EventHandler(this.dadoControl1_Load);
             // 
             // Form1
             // 
@@ -322,7 +312,6 @@
             this.AutoSize = true;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1158, 514);
-            this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.checkBox5);
             this.Controls.Add(this.checkBox4);
@@ -384,7 +373,6 @@
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox5;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
     }
 }
 

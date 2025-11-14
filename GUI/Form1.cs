@@ -2,13 +2,7 @@
 using BLL;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GUI
@@ -253,29 +247,24 @@ namespace GUI
                 }
 
                 int puntos = gestorPuntaje.CalcularPuntajeParaCategoria(categoriaNombre, valores, tableroActual);
-
-                // 5) Anotar
                 bool ok = tableroService.AnotarPuntuacion(tableroActual, categoriaNombre, puntos);
-                if (!ok)
-                {
-                    MessageBox.Show("No se pudo anotar la puntuación.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                int jugadorIndice = (tableroActual == tableroJugador1) ? 0 : 1;
-                gestorpartida.SumarPuntos(jugadorIndice, puntos);
-                CrearTablerosVisuales();
-                tiradaService.ReiniciarTirada(tiradaActual);
-                checkBox1.Checked = false;
-                checkBox2.Checked = false;
-                checkBox3.Checked = false;
-                checkBox4.Checked = false;
-                checkBox5.Checked = false;
-                RefrescarTodasImagenes();
-                button6.Enabled = false;
-                gestorpartida.CambiarTurno();
+                if (!ok) { MessageBox.Show("No se pudo anotar la puntuación.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+
+                // 2) Registrar movimiento ANTES de cambiar el turno, con el jugador actual
                 BE.Usuario jugadorAccion = gestorpartida.ObtenerJugadorActual();
                 bitacora.RegistrarMovimiento("Anotar", jugadorAccion, categoriaNombre, puntos, tiradaActual.NumeroLanzamientos);
+
+                int jugadorIndice = (tableroActual == tableroJugador1) ? 0 : 1;
+                gestorpartida.SumarPuntos(jugadorIndice, puntos);
+
+                CrearTablerosVisuales();
+                tiradaService.ReiniciarTirada(tiradaActual);
+                checkBox1.Checked = checkBox2.Checked = checkBox3.Checked = checkBox4.Checked = checkBox5.Checked = false;
+                RefrescarTodasImagenes();
+                button6.Enabled = false;
+
+                gestorpartida.CambiarTurno(); // mover después de registrar
                 RefreshTurno();
             }
             catch (Exception ex)
@@ -364,6 +353,10 @@ namespace GUI
             Begin();
             CrearTablerosVisuales();
             InicializarDados();
+
+            // 1) Crear archivo XML por partida (nombre con fecha y jugadores)
+            bitacora.NuevaPartidaBitacora(DateTime.Now, $"{sesion.Get(0)?.Nombre}-{sesion.Get(1)?.Nombre}");
+
             List<Usuario> jugadores = new List<Usuario>();
             if (sesion.Get(0) != null) jugadores.Add(sesion.Get(0));
             if (sesion.Get(1) != null) jugadores.Add(sesion.Get(1));
@@ -393,9 +386,10 @@ namespace GUI
             if (sesion.Get(0) != null) jugadores.Add(sesion.Get(0));
             if (sesion.Get(1) != null) jugadores.Add(sesion.Get(1));
             bitacora.RegistrarFin(jugadores, ganador);
-            bitacora.LimpiarBitacora();
+
             btn_Finalizar.Enabled = false;
             btn_Iniciar.Enabled = true;
+
         }
         #endregion
         #region "VISUAL"
@@ -548,43 +542,36 @@ namespace GUI
                     return;
                 }
                 bool ok = tableroService.AnotarPuntuacion(tableroActual, categoriaNombre, 0);
-                if (!ok)
-                {
-                    MessageBox.Show("No se pudo tachar la categoría.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                if (!ok) { MessageBox.Show("No se pudo tachar la categoría.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
-                // Sumar 0 (no cambia puntaje, pero deja el flujo explícito)
+                // 2) Registrar movimiento ANTES de cambiar el turno
+                BE.Usuario jugadorAccion = gestorpartida.ObtenerJugadorActual();
+                bitacora.RegistrarMovimiento("Tachar", jugadorAccion, categoriaNombre, 0, tiradaActual?.NumeroLanzamientos ?? 0);
+
                 int jugadorIndice = (tableroActual == tableroJugador1) ? 0 : 1;
                 gestorpartida.SumarPuntos(jugadorIndice, 0);
 
-                // Mismo flujo que al anotar
                 CrearTablerosVisuales();
                 tiradaService.ReiniciarTirada(tiradaActual);
-                checkBox1.Checked = false;
-                checkBox2.Checked = false;
-                checkBox3.Checked = false;
-                checkBox4.Checked = false;
-                checkBox5.Checked = false;
+                checkBox1.Checked = checkBox2.Checked = checkBox3.Checked = checkBox4.Checked = checkBox5.Checked = false;
                 RefrescarTodasImagenes();
                 button6.Enabled = false;
+
                 gestorpartida.CambiarTurno();
-                BE.Usuario jugadorAccion = gestorpartida.ObtenerJugadorActual();
-                bitacora.RegistrarMovimiento("Tachar", jugadorAccion, categoriaNombre, 0, tiradaActual?.NumeroLanzamientos ?? 0);
-                RefreshTurno(); 
+                RefreshTurno();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show($"Error al tachar: {ex.Message}", "Error",
-                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void button8_Click(object sender, EventArgs e)
+
+        private void dadoControl1_Load(object sender, EventArgs e)
         {
-            Form2 frm = new Form2();
-            frm.Show();
+
         }
     }
     }
